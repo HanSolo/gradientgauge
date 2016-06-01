@@ -91,10 +91,10 @@ public class GradientGauge extends Region {
                             .startAngle(340)
                             .minValue(MIN_VALUE)
                             .maxValue(MAX_VALUE)
-                            .barColor(Color.CYAN)
+                            .barColor(Color.MAGENTA)
                             .valueColor(Color.WHITE)
                             .value(VALUE)
-                            .unit(UNIT)
+                            .shadowsEnabled(false)
                             .build();
 
         backgroundPaint = Color.rgb(46, 75, 76);
@@ -148,7 +148,7 @@ public class GradientGauge extends Region {
 
         gradient = new ConicalGradient();
 
-        dropShadow = new DropShadow(BlurType.TWO_PASS_BOX, Color.rgb(0, 255, 255), 10, 0, 0, 0);
+        dropShadow = new DropShadow(BlurType.TWO_PASS_BOX, model.getBarColor(), 10, 0, 0, 0);
 
         bar = new Arc(PREFERRED_WIDTH * 0.5, PREFERRED_HEIGHT * 0.5,
                       PREFERRED_WIDTH * 0.43125, PREFERRED_HEIGHT * 0.43125,
@@ -157,7 +157,7 @@ public class GradientGauge extends Region {
         bar.setStroke(gradient.getImagePattern(new Rectangle(0, 0, PREFERRED_WIDTH, PREFERRED_HEIGHT)));
         bar.setStrokeWidth(PREFERRED_WIDTH * 0.1375);
         bar.setStrokeLineCap(StrokeLineCap.BUTT);
-        bar.setEffect(dropShadow);
+        bar.setEffect(model.isShadowsEnabled() ? dropShadow : null);
 
         pane = new Pane(innerCircle, valueText, backgroundRing, bar);
         pane.setBackground(new Background(new BackgroundFill(backgroundPaint, new CornerRadii(1024), Insets.EMPTY)));
@@ -172,6 +172,7 @@ public class GradientGauge extends Region {
         model.currentValueProperty().addListener(o -> handleControlPropertyChanged("VALUE"));
         model.barColorProperty().addListener(o -> resize());
         model.valueColorProperty().addListener(o -> valueText.setFill(model.getValueColor()));
+        model.shadowsEnabledProperty().addListener(o -> bar.setEffect(model.isShadowsEnabled() ? dropShadow : null));
     }
 
 
@@ -205,7 +206,10 @@ public class GradientGauge extends Region {
     public Color getValueColor() { return model.getValueColor(); }
     public void setValueColor(final Color COLOR) { model.setValueColor(COLOR); }
 
+    public boolean isShadowsEnabled() { return model.isShadowsEnabled(); }
+    public void setShadowsEnabled(final boolean ENABLED) { model.setShadowsEnabled(ENABLED); }
 
+    
     // ******************** Resizing ******************************************
     private void resize() {
         double width = getWidth() - getInsets().getLeft() - getInsets().getRight();
@@ -234,6 +238,10 @@ public class GradientGauge extends Region {
             backgroundRing.setRadiusY(size * 0.375);
             backgroundRing.setStrokeWidth(size * 0.16);
 
+            dropShadow = new DropShadow(BlurType.TWO_PASS_BOX, model.getBarColor(), 10, 0, 0, 0);
+
+            dropShadow.setRadius(size * 0.03125);
+
             bar.setCenterX(center);
             bar.setCenterY(center);
             bar.setRadiusX(size * 0.375);
@@ -247,6 +255,8 @@ public class GradientGauge extends Region {
 
     private void redraw() {
         backgroundPaint = model.getBarColor().deriveColor(0, 0.4, 0.3, 1);
+
+        dropShadow.setColor(model.getBarColor());
 
         innerCircle.setFill(model.getBarColor().deriveColor(0, 1, 0.08, 1));
         valueText.setFill(model.getValueColor());
