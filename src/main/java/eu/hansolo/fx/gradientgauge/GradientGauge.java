@@ -209,7 +209,7 @@ public class GradientGauge extends Region {
     public boolean isShadowsEnabled() { return model.isShadowsEnabled(); }
     public void setShadowsEnabled(final boolean ENABLED) { model.setShadowsEnabled(ENABLED); }
 
-    
+
     // ******************** Resizing ******************************************
     private void resize() {
         double width = getWidth() - getInsets().getLeft() - getInsets().getRight();
