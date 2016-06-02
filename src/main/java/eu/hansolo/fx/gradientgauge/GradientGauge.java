@@ -19,6 +19,7 @@ package eu.hansolo.fx.gradientgauge;
 import eu.hansolo.medusa.Fonts;
 import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.GaugeBuilder;
+import eu.hansolo.medusa.tools.ConicalGradient;
 import eu.hansolo.medusa.tools.Helper;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -85,7 +86,7 @@ public class GradientGauge extends Region {
     }
     public GradientGauge(final double VALUE, final double MIN_VALUE, final double MAX_VALUE, final String UNIT) {
         model = GaugeBuilder.create()
-                            .animated(false)
+                            .animated(true)
                             .animationDuration(2000)
                             .angleRange(320)
                             .startAngle(340)
