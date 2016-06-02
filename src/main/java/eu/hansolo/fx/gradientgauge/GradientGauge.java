@@ -85,13 +85,13 @@ public class GradientGauge extends Region {
     }
     public GradientGauge(final double VALUE, final double MIN_VALUE, final double MAX_VALUE, final String UNIT) {
         model = GaugeBuilder.create()
-                            .animated(true)
+                            .animated(false)
                             .animationDuration(2000)
                             .angleRange(320)
                             .startAngle(340)
                             .minValue(MIN_VALUE)
                             .maxValue(MAX_VALUE)
-                            .barColor(Color.MAGENTA)
+                            .barColor(Color.CYAN)
                             .valueColor(Color.WHITE)
                             .value(VALUE)
                             .shadowsEnabled(false)
